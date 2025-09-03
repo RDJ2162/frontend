@@ -110,7 +110,13 @@ define([
     this.connected = async () => {
       // accUtils.announce("Customers page loaded.", "assertive");
       // document.title = "Customers";
-      let response = await fetch(apiBaseUrl+"/transactions");
+      let response = await fetch(apiBaseUrl+"/transactions",{
+        method: "GET",
+              headers: {
+                Authorization: "Basic YWRtaW46YWRtaW4xMjM=",
+                "Content-Type": "application/json",
+              },
+      });
       let data = await response.json();
       console.log(data);
 

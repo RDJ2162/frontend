@@ -307,7 +307,13 @@ function TransactionByIdViewModel(params) {
       // accUtils.announce("Customers page loaded.", "assertive");
       // document.title = "Customers";
        const customerId = params?.params?.id || getCustomerIdFromURL();
-      let response = await fetch(`${apiBaseUrl}/transactions/customer/${customerId}`);
+      let response = await fetch(`${apiBaseUrl}/transactions/customer/${customerId}`,{
+        method: "GET",
+              headers: {
+                Authorization: "Basic YWRtaW46YWRtaW4xMjM=",
+                "Content-Type": "application/json",
+              },
+      });
       let data = await response.json();
       console.log(data);
 
