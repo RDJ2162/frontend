@@ -1,0 +1,159 @@
+<h2>
+    <oj-bind-text value="[[fullName]]"></oj-bind-text>
+</h2>
+
+<div class="oj-flex oj-flex-items-pad oj-sm-justify-content-center" style="min-height: 100vh;">
+    <div class="oj-flex-item oj-sm-12 oj-md-8 oj-lg-6">
+
+        <oj-c-form-layout id="customerForm" max-columns="2" direction="row">
+            <oj-c-input-text value="{{firstName}}" label-hint="First name"></oj-c-input-text>
+            <oj-c-input-text value="{{lastName}}" label-hint="Last name"></oj-c-input-text>
+            <oj-c-input-text type="email" value="{{email}}" label-hint="Email"></oj-c-input-text>
+
+            <oj-c-input-number value="{{phone}}" label-hint="Phone"></oj-c-input-number>
+            <oj-c-input-date-picker value="{{dateOfBirth}}" label-hint="Date of Birth"></oj-c-input-date-picker>
+
+            <oj-c-select-single data="[[maritalStatusOptionsDP]]" item-text="label" value="{{maritalStatus}}"
+                label-hint="Marital Status"></oj-c-select-single>
+
+            <oj-c-text-area value="{{address}}" label-hint="Address" rows="3" column-span="2"></oj-c-text-area>
+            <oj-c-input-sensitive-text value="{{password}}" label-hint="Password"></oj-c-input-sensitive-text>
+            <oj-c-input-sensitive-text value="{{confirmPassword}}"
+                label-hint="Confirm Password"></oj-c-input-sensitive-text>
+
+            <oj-c-checkbox value="{{acceptTermsAndConditions}}">Accept Terms and Conditions</oj-c-checkbox>
+
+            <oj-button disabled="{{!acceptTermsAndConditions()}}" id="dis_button1" chroming="callToAction"
+                on-click="{{handleSubmit}}">Submit</oj-button>
+        </oj-c-form-layout>
+    </div>
+</div>
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+
+
+define(['knockout', 'ojs/ojarraydataprovider', '../models/customer', 'ojs/ojlabel', 'oj-c/input-text', 'oj-c/input-number', 'oj-c/form-layout', "oj-c/input-date-picker", "oj-c/select-single", "oj-c/text-area", "oj-c/input-sensitive-text", "oj-c/checkbox", "ojs/ojbutton"],
+    (ko, ArrayDataProvider, Customer) => {
+
+        class HomeViewModel {
+            constructor(params) {
+
+                this.maritalStatusOptions = [
+                    { value: "single", label: "Single" },
+                    { value: "married", label: "Married" },
+                    { value: "divorced", label: "Divorced" }
+                ];
+
+                this.maritalStatusOptionsDP = new ArrayDataProvider(this.maritalStatusOptions, { keyAttributes: "value" });
+
+                this.firstName = ko.observable("");
+                this.lastName = ko.observable("");
+                this.email = ko.observable("");
+                this.phone = ko.observable("");
+                this.dateOfBirth = ko.observable(null);
+                this.maritalStatus = ko.observable(this.maritalStatusOptionsDP.data[0].value);
+                this.address = ko.observable("");
+                this.password = ko.observable("");
+                this.confirmPassword = ko.observable("");
+                this.acceptTermsAndConditions = ko.observable(false);
+
+                this.fullName = ko.pureComputed(() => {
+                    return `${this.firstName()} ${this.lastName()}`;
+                });
+
+                this.handleSubmit = () => {
+
+                    if (this.password() !== this.confirmPassword()) {
+                        console.error("Passwords do not match");
+                        return;
+                    }
+
+                    const customerData = new Customer();
+                    customerData.firstName(this.firstName());
+                    customerData.lastName(this.lastName());
+                    customerData.email(this.email());
+                    customerData.phone(this.phone());
+                    customerData.dateOfBirth(this.dateOfBirth());
+                    customerData.maritalStatus(this.maritalStatus());
+                    customerData.address(this.address());
+                    customerData.password(this.password());
+                    customerData.confirmPassword(this.confirmPassword());
+                    customerData.acceptTermsAndConditions(this.acceptTermsAndConditions());
+
+                    
+
+                    // Perform the submission logic here
+                    console.log("Customer Data Submitted:", ko.toJS(customerData));
+
+                    // submit data to post localhost:5000/api/customersNew use await
+                    async function submitData(customerData){
+                        try {
+                            const response = await fetch('http://localhost:5000/api/customersNew', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(ko.toJS(customerData))
+                            });
+
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+
+                            const result = await response.json();
+                            console.log("Customer Data Submitted Successfully:", result);
+                        } catch (error) {
+                            console.error("Error submitting customer data:", error);
+                        }
+                    };
+                    submitData(customerData);
+                }
+            }
+        }
+
+        return new HomeViewModel();
+    })
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------
+
+define(['axios', 'knockout'],
+ function(axios, ko) {
+    function Env(parentRouter) {
+
+      this.apiBaseUrl = 'http://localhost:8080';
+
+     }
+    return Env;
+  }
+);
+
+
+
+
+--------------------
+
+
+define(['knockout', '../accUtils', 'axios', '../utils/env', "ojs/ojmutablearraydataprovider", "ojs/ojdataprovider", "ojs/ojlistdataproviderview",
+  "oj-c/table", "oj-c/button", "oj-c/input-text"],
+  function (ko, accUtils, axios, Env, MutableArrayDataProvider, ojdataprovider, ListDataProviderView) {
+    function CustomerViewModel(params) {
+
+      var self = this;
+      const env = new Env(params.parentRouter);

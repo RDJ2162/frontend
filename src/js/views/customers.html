@@ -1,0 +1,58 @@
+<!--
+ Copyright (c) 2014, 2025, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-hybrid-padding">
+  <h1>Customers Content Area</h1>
+  <div>
+    <oj-c-input-text
+              id="filter"
+              class="oj-form-control-max-width-md"
+              label-hint="Department Table Filter"
+              label-edge="inside"
+              placeholder="Type to filter"
+              on-raw-value-changed="[[handleRawValueChanged]]"
+              clear-icon="always"
+              class="demo-table-container"></oj-c-input-text>
+              <oj-c-button id="navToCustomer" on-oj-action="[[addupdatecustomer]]" label="go to customer"></oj-c-button>
+</h2>
+    <oj-table id="table" aria-label="Customer Table" accessibility.row-header="name" data="[[dataProvider]]"
+      layout="fixed" class="demo-table-container" columns='[
+    { "headerText": "Name", "id": "customer_name", "sortable": "enabled", "minWidth": "8rem" },
+    { "headerText": "Aadhar Card No", "id": "aadharcardno" },
+    { "headerText": "Billing Address", "id": "address", "weight": 2 },
+    { "headerText": "Balance", "id": "balance", "headerClassName": "oj-helper-text-align-end", "className": "oj-helper-text-align-end" },
+    { "headerText": "Mobile", "id": "mobile" },
+    { "headerText": "Status", "id": "status" },
+     {"headerText": "email", "id": "email" }
+  ]'>
+  
+
+
+
+      <template slot="rowTemplate" data-oj-as="row">
+        <tr>
+          <!-- <td><oj-bind-text value="[[row.data.customer_name]]"></oj-bind-text></td> -->
+
+          <a href="#" on-click="[[() =>goToCustomer(row.data.customerId)]]">
+            <!-- <oj-c-button id="navToCustomer" on-oj-action="[[goToCustomer(row.data.customerId)]]" label="go to customer"></oj-c-button> -->
+
+    <oj-bind-text value="[[row.data.customer_name]]"></oj-bind-text>
+  </a>
+          <td><oj-bind-text value="[[row.data.aadharcardno]]"></oj-bind-text></td>
+          <td><oj-bind-text value="[[row.data.address]]"></oj-bind-text></td>
+          <td><oj-bind-text value="[[row.data.balance]]"></oj-bind-text></td>
+          <td><oj-bind-text value="[[row.data.mobile]]"></oj-bind-text></td>
+          <td><oj-bind-text value="[[row.data.status]]"></oj-bind-text></td>
+          <td><oj-bind-text value="[[row.data.email]]"></oj-bind-text></td>
+
+        </tr>
+      </template>
+
+
+    
+    
+    </oj-table>
+  </div>
+</div>
