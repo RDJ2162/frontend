@@ -9,7 +9,7 @@
  * Your customer ViewModel code goes here
  */
 define([
-  '../utils/env',
+  "../utils/env",
   "../accUtils",
   "knockout",
 
@@ -18,12 +18,13 @@ define([
   "ojs/ojlistdataproviderview",
   "ojs/ojpagingdataproviderview",
   "ojs/ojarraydataprovider",
-  
-  'ojs/ojrouter', "ojs/ojcore",
-    "ojs/ojtable",
+
+  "ojs/ojrouter",
+  "ojs/ojcore",
+  "ojs/ojtable",
   "oj-c/input-text",
   "ojs/ojpagingcontrol",
-  "oj-c/button"
+  "oj-c/button",
 ], function (
   env,
   accUtils,
@@ -32,16 +33,14 @@ define([
   ojdataprovider_1,
   ListDataProviderView,
   PagingDataProviderView,
-  ArrayDataProvider,
-
-  
+  ArrayDataProvider
 ) {
-  function CustomerViewModel(params) { 
+  function CustomerViewModel(params) {
     var self = this;
-    self.router=params.parentRouter;
-        const apiBaseUrl =  env.apiBaseUrl;
-        console.log("this is base url"+apiBaseUrl);
-        
+    self.router = params.parentRouter;
+    const apiBaseUrl = env.apiBaseUrl;
+    console.log("this is base url" + apiBaseUrl);
+
     // const router = params?.ojRouter;
     // Below are a set of the ViewModel methods invoked by the oj-module component.
     // Please reference the oj-module jsDoc for additional information.
@@ -73,29 +72,52 @@ define([
       let rawValue = event.detail.value;
       console.log(event.detail.value);
 
-      self.dataProvider.filterCriterion = rawValue === "" || rawValue === undefined
+      self.dataProvider.filterCriterion =
+        rawValue === "" || rawValue === undefined
           ? undefined
           : ojdataprovider_1.FilterFactory.getFilter({
               filterDef: { text: rawValue },
             });
     };
 
-    self.goToCustomer=(customerId)=>{
-            self.router.go({path:"transactionById", params:{id:customerId} });
-        };
-        self.addupdatecustomer=()=>{
-            self.router.go({path:"addupdatecustomer"});
+    self.goToCustomer = (customerId) => {
+      self.router.go({ path: "transactionById", params: { id: customerId } });
+    };
+    self.addupdatecustomer = () => {
+      self.router.go({ path: "addupdatecustomer",params: {
+       }
+       
+      });
+    };
+    self.updateCustomer = (data) => {
+      // console.log(data);
+
+      self.router.go({
+        path: "addupdatecustomer",
+        params: {
+          aadharcardno:data.aadharcardno,
+          address:data.address,
+          balance:data.balance,
+          creditcardno:data.creditcardno,
+          customerId:data.customerId,
+          customer_name:data.customer_name,
+          email:data.email,
+          mobile:data.mobile,
+          status:data.status,
         }
-    
+        
+      });
+    };
+
     this.connected = async () => {
       accUtils.announce("Customers page loaded.", "assertive");
       document.title = "Customers";
-      let response = await fetch(apiBaseUrl+"/customers",{
-        method: "GET", 
-    headers: {
-        "Authorization": "Basic YWRtaW46YWRtaW4xMjM=",
-        "Content-Type": "application/json" 
-    }
+      let response = await fetch(apiBaseUrl + "/customers", {
+        method: "GET",
+        headers: {
+          Authorization: "Basic YWRtaW46YWRtaW4xMjM=",
+          "Content-Type": "application/json",
+        },
       });
       let data = await response.json();
       console.log(data);
@@ -106,7 +128,7 @@ define([
       // }));
       // self.dataprovider.data = self.data();
       self.mutableArrayDataProvider.data = self.data();
-      
+
       // Implement further logic if needed
     };
 

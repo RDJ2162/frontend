@@ -25,7 +25,8 @@
     { "headerText": "Balance", "id": "balance", "headerClassName": "oj-helper-text-align-end", "className": "oj-helper-text-align-end" },
     { "headerText": "Mobile", "id": "mobile" },
     { "headerText": "Status", "id": "status" },
-     {"headerText": "email", "id": "email" }
+     {"headerText": "email", "id": "email" },
+     {"headerText": "", "id": "edit" }
   ]'>
   
 
@@ -46,6 +47,14 @@
           <td><oj-bind-text value="[[row.data.mobile]]"></oj-bind-text></td>
           <td><oj-bind-text value="[[row.data.status]]"></oj-bind-text></td>
           <td><oj-bind-text value="[[row.data.email]]"></oj-bind-text></td>
+          <!-- <a href="#" on-click="[[() =>goToCustomer(row.data.customerId)]]"> -->
+            <oj-c-button id="navToCustomer" on-oj-action="[[() =>updateCustomer(row.data)]]"  display="icons">
+              <span slot="startIcon" class="oj-ux-ico-edit"></span>
+                      Edit
+            </oj-c-button>
+
+    <!-- <oj-bind-text value="[[row.data.customer_name]]"></oj-bind-text> -->
+  <!-- </a> -->
 
         </tr>
       </template>

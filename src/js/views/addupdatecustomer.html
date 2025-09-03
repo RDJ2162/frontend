@@ -1,32 +1,32 @@
 <h2>
   <oj-bind-text value="[[customer_name]]"></oj-bind-text>
 </h2>
-
+<!-- <oj-bind-text value="[[getValidationMessage(customer_name)]]"></oj-bind-text> -->
 <div class="oj-flex oj-flex-items-pad oj-sm-justify-content-center" style="min-height: 100vh;">
   <div class="oj-flex-item oj-sm-12 oj-md-8 oj-lg-6">
 
     <oj-c-form-layout id="customerForm" max-columns="2" direction="row">
 
       <!-- Customer Name -->
-      <oj-c-input-text value="{{customer_name}}" label-hint="Customer Name" column-span="2"></oj-c-input-text>
+      <oj-c-input-text validators="[[[requiredValidator,lengthValidator]]]"  value="{{customer_name}}" label-hint="Customer Name" column-span="2"></oj-c-input-text>
 
       <!-- Mobile -->
-      <oj-c-input-text value="{{mobile}}" label-hint="Mobile" maxlength="10" pattern="^[0-9]{10}$"></oj-c-input-text>
+      <oj-c-input-text validators="[[[requiredValidator,phoneLengthValidator,phoneTypeValidator]]]"  value="{{mobile}}" label-hint="Mobile"></oj-c-input-text>
 
       <!-- Email -->
-      <oj-c-input-text type="email" value="{{email}}" label-hint="Email"></oj-c-input-text>
+      <oj-c-input-text validators="[[[requiredValidator,regexpEmail]]]" type="email"  value="{{email}}" label-hint="Email"></oj-c-input-text>
 
       <!-- Address -->
-      <oj-c-text-area value="{{address}}" label-hint="Address" rows="3" column-span="2"></oj-c-text-area>
+      <oj-c-text-area validators="[[[requiredValidator]]]" value="{{address}}" label-hint="Address" rows="3" column-span="2"></oj-c-text-area>
 
       <!-- Aadhar Card Number -->
-      <oj-c-input-text value="{{aadharcardno}}" label-hint="Aadhar Card Number"></oj-c-input-text>
+      <oj-c-input-text validators="[[[requiredValidator,adharLengthValidator,cardNumberValidation]]]" value="{{aadharcardno}}" label-hint="Aadhar Card Number"></oj-c-input-text>
 
       <!-- Credit Card Number -->
-      <oj-c-input-text value="{{creditcardno}}" label-hint="Credit Card Number"></oj-c-input-text>
+      <oj-c-input-text validators="[[[requiredValidator,creditLengthValidator,cardNumberValidation]]]" value="{{creditcardno}}" label-hint="Credit Card Number"></oj-c-input-text>
 
       <!-- Balance -->
-      <oj-c-input-number value="{{balance}}" label-hint="Balance" ></oj-c-input-number>
+      <oj-c-input-number validators="[[[requiredValidator,balanceValidation]]]" value="{{balance}}" label-hint="Balance" min="1001"></oj-c-input-number>
 
       <!-- Status -->
       <oj-c-select-single
@@ -38,7 +38,7 @@
 </oj-c-select-single>
 
       <!-- Submit Button -->
-      <oj-button id="submitButton" chroming="callToAction" on-click="[[handleSubmit]]">
+      <oj-button  id="submitButton" chroming="callToAction" on-click="[[handleSubmit]]">
         Submit
       </oj-button>
 
